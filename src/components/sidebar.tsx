@@ -1,5 +1,28 @@
 import { useSidebar } from "@/hooks/use-side-bar";
 import { cn } from "@/utils/tw-merge";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { FaUserLarge } from "react-icons/fa6";
+import { IoMdCall } from "react-icons/io";
+import { ImHome } from "react-icons/im";
+
+const links = [
+  {
+    icon: ImHome,
+    cta: "Home",
+    path: "/",
+  },
+  {
+    icon: FaUserLarge,
+    cta: "About",
+    path: "/about",
+  },
+  {
+    icon: IoMdCall,
+    cta: "Contact",
+    path: "/contact",
+  },
+];
 
 export const Sidebar = () => {
   const { state, setState } = useSidebar();
@@ -11,19 +34,19 @@ export const Sidebar = () => {
   return (
     <div
       className={cn(
-        "fixed z-10 h-screen w-max select-none border-r border-r-white/80 py-4 transition-all duration-200 bg-[#2D2D2D] text-white/90",
+        "fixed px-2 border-r-[0.4px] border-r-white/90 z-10 h-screen w-max select-none transition-all duration-200 bg-[#2D2D2D] text-white/90",
         state == "open" && "w-[180px]"
       )}
     >
-      <nav className="flex flex-col gap-3">
+      <nav className="flex flex-col gap-3 py-4">
         <button
-          className="bg-inherit outline-none border-none p-0 w-full flex items-center justify-center "
+          className="bg-inherit w-full outline-none border-none flex items-start"
           onClick={handleToggle}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="40"
+            height="40"
             viewBox="0 0 24 24"
             className="flex h-6 w-6"
           >
@@ -36,9 +59,20 @@ export const Sidebar = () => {
           </svg>
         </button>
 
-        <ul className="mr-2 flex w-full flex-1 flex-col items-center gap-3">
-          {["Home", "About", "Contact"].map((it, idx) => (
-            <li key={idx}>{it}</li>
+        <ul className="mr-2 w-full grid grid-cols-1 gap-3">
+          {links.map(({ icon: Icon, path, cta }, idx) => (
+            <li key={idx} className="w-full">
+              <Button
+                variant="outline"
+                className="w-full px-2 h-max bg-inherit outline-red border-red flex items-start"
+                asChild
+              >
+                <Link to={path}>
+                  <Icon className="text-xl" />
+                  {state == "open" && <span className="text-md">{cta}</span>}
+                </Link>
+              </Button>
+            </li>
           ))}
         </ul>
       </nav>
